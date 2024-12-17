@@ -1,0 +1,108 @@
+REM Rubber Ducky Comprehensive Keystroke Learning Script with John the Ripper Module
+REM Demonstrates every kind of key and key combination, including running John the Ripper
+DELAY 2000
+
+REM Open a terminal (Linux example: gnome-terminal, adapt for your OS)
+GUI r
+DELAY 500
+STRING gnome-terminal
+ENTER
+DELAY 2000
+
+REM Start John the Ripper Module
+STRING echo "Running John the Ripper Module..."
+ENTER
+DELAY 500
+
+REM Navigate to the appropriate directory
+STRING cd ~/Desktop
+ENTER
+DELAY 500
+
+REM Prepare a simple password file
+STRING echo "user1:password123" > passwords.txt
+ENTER
+DELAY 500
+STRING echo "user2:qwerty" >> passwords.txt
+ENTER
+DELAY 500
+
+STRING echo "Password file created."
+ENTER
+DELAY 500
+
+REM Run John the Ripper on the password file
+STRING john --format=raw-md5 passwords.txt
+ENTER
+DELAY 3000
+
+REM Display cracked passwords
+STRING john --show passwords.txt
+ENTER
+DELAY 3000
+
+REM Clean up generated files
+STRING rm passwords.txt
+ENTER
+DELAY 500
+
+STRING echo "John the Ripper module complete."
+ENTER
+DELAY 500
+
+REM Lesson 1: Basic Alphanumeric Keys
+STRING Demonstrating Basic Alphanumeric Keys...
+ENTER
+DELAY 500
+STRING ABCDEFGHIJKLMNOPQRSTUVWXYZ
+ENTER
+STRING abcdefghijklmnopqrstuvwxyz
+ENTER
+STRING 0123456789
+ENTER
+
+REM Lesson 2: Special Characters
+STRING Demonstrating Special Characters...
+ENTER
+DELAY 500
+STRING !@#$%^&*()_+-={}[]:";'<>?,./\|`~
+ENTER
+
+REM Lesson 3: Function Keys
+STRING Demonstrating Function Keys...
+ENTER
+DELAY 500
+STRING F1 through F12:
+ENTER
+DELAY 500
+F1
+F2
+F3
+F4
+F5
+F6
+F7
+F8
+F9
+F10
+F11
+F12
+
+REM Lesson 4: Modifier Keys
+STRING Demonstrating Modifier Keys...
+ENTER
+DELAY 500
+CTRL c
+CTRL v
+CTRL s
+SHIFT a
+ALT TAB
+
+REM Lesson 5: Wrap-Up
+STRING All lessons demonstrated, including John the Ripper integration.
+ENTER
+STRING Thank you for using this script. Happy Hacking!
+ENTER
+DELAY 500
+STRING exit
+ENTER

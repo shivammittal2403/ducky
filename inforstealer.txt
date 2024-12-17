@@ -1,0 +1,52 @@
+REM Rubber Ducky Script to Change User Password in Windows with PowerShell (Educational Use Only)
+
+REM Open PowerShell as admin
+DELAY 1000
+WINDOWS r
+DELAY 500
+STRING powershell Start-Process powershell -Verb runAs
+ENTER
+DELAY 1000
+
+REM Confirm admin privileges
+ALT y
+DELAY 1000
+
+REM Prompt user for confirmation to proceed
+STRING $confirmation = Read-Host "Do you want to change the password? (Y/N)"
+ENTER
+DELAY 500
+
+REM Check user confirmation
+STRING if ($confirmation -eq "Y") {
+ENTER
+DELAY 500
+
+REM Ask for username and new password
+STRING $username = Read-Host "Enter username"
+ENTER
+DELAY 500
+STRING $newpassword = Read-Host "Enter new password"
+ENTER
+DELAY 500
+
+REM Execute password change
+STRING net user $username $newpassword
+ENTER
+DELAY 500
+
+REM Notify user of successful password change
+STRING Write-Host "Password changed successfully"
+ENTER
+DELAY 500
+} else {
+ENTER
+DELAY 500
+
+REM Notify user of cancellation
+STRING Write-Host "Password change cancelled"
+ENTER
+DELAY 500
+}
+
+REM End script
